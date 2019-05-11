@@ -11,5 +11,7 @@ public class MainAdapter {
                 .baseUrl("https://reqres.in/api/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
+
+        return retrofit;
     }
 }
