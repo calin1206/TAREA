@@ -44,6 +44,7 @@ public class ProfesoresActivity extends AppCompatActivity {
                         Profesores);
         //asignamos adaptador al list view
         lvProfesores.setAdapter(adapter);
+        registerForContextMenu(lvProfesores);
         //
         btnGrebar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,14 +60,32 @@ public class ProfesoresActivity extends AppCompatActivity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
+        //
         MenuInflater inflater = getMenuInflater();
+        //Adaptador de Vista
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)
                 menuInfo;
-        menu.setHeaderTitle("Titul Menu Contextual");
-        //llama al menu creado
+        menu.setHeaderTitle("Profesor:" + Profesores.get(info.position));
+        //llama al menu Creado
         inflater.inflate(R.menu.menu_contextual, menu);
-    }
+    }//fin metodo onCreateContextMenu
 
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info =
+                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId()) {
+            case R.id.menu_eliminar:
+                //eliminamos el item array por la posicion
+                Profesores.remove(info.position);
+                //actualizamos el Adapatador
+                adapter.notifyDataSetChanged();
+                return true;
+            default:
+        }
+        return super.onContextItemSelected(item);
+    }// fin metodo onContextItemSelected
 
     //mostramos el menu
     @Override
