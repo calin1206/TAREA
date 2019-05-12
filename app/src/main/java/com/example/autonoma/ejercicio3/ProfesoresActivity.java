@@ -3,6 +3,7 @@ package com.example.autonoma.ejercicio3;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,7 +16,18 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.autonoma.ejercicio3.adapter.MainAdapter;
+import com.example.autonoma.ejercicio3.api.UsuarioAPI;
+import com.example.autonoma.ejercicio3.model.Usuario;
+import com.example.autonoma.ejercicio3.model.Usuarios;
+
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class ProfesoresActivity extends AppCompatActivity {
 
@@ -25,6 +37,8 @@ public class ProfesoresActivity extends AppCompatActivity {
     ListView lvProfesores;
 
     ArrayAdapter<String> adapter;
+    Retrofit retrofit;
+    UsuarioAPI usuarioApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +57,7 @@ public class ProfesoresActivity extends AppCompatActivity {
                         android.R.layout.simple_list_item_1,
                         Profesores);
         //asignamos adaptador al list view
-        lvProfesores.setAdapter(adapter);
+        //lvProfesores.setAdapter(adapter);
         registerForContextMenu(lvProfesores);
         //
         btnGrebar.setOnClickListener(new View.OnClickListener() {
@@ -53,7 +67,24 @@ public class ProfesoresActivity extends AppCompatActivity {
                 lvProfesores.deferNotifyDataSetChanged();
             }
         });
+        //Instancio el adaptador
+        retrofit = new MainAdapter().getAdapter();
+        usuarioApi = retrofit.create(UsuarioAPI.class);
+        //Obtener todos
+        Call<List<Usuarios>> usuariosCall = usuarioApi.getAllUsuarios();
+        usuariosCall.enqueue(new Callback<List<Usuarios>>() {
+            @Override
+            public void onResponse(Call<List<Usuarios>> call, Response<List<Usuarios>> response) {
+                Log.d("retorno", response.body().toString());
+                // List<Usuario> usuario = response.body().getData();
 
+            }
+
+            @Override
+            public void onFailure(Call<List<Usuarios>> call, Throwable t) {
+
+            }
+        });
 
     }// Fin onCreate
 
@@ -119,7 +150,7 @@ public class ProfesoresActivity extends AppCompatActivity {
             case R.id.vermapa:
                 //Crear un activity Plantilla Mapa
                 //Lleva al Activity
-                Intent i = new Intent(this, Mapa.class);
+                Intent i = new Intent(this, MapsActivity.class);
                 startActivity(i);
 
                 Toast.makeText(ProfesoresActivity.this, "Ver Mapa", Toast.LENGTH_LONG).show();

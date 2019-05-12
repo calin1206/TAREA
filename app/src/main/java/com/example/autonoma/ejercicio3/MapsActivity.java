@@ -3,16 +3,21 @@ package com.example.autonoma.ejercicio3;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +43,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        //DIRECCIONES MOVIENDO LA CAMARA
+        LatLng autonoma = new LatLng(-12.195483, -76.9719602);
+        LatLng libreria = new LatLng(-12.1950265, -76.9716449);
+        LatLng jugos = new LatLng(-12.1963635, -76.9721322);
+
+        mMap.addMarker(new MarkerOptions().position(autonoma).title("Universidad Autonoma"));
+        mMap.addMarker(new MarkerOptions().position(libreria).title("Libreria"));
+        mMap.addMarker(new MarkerOptions().position(jugos).title("Jugos"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(autonoma, 18));
+
+
     }
+
 }
